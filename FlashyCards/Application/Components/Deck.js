@@ -1,18 +1,26 @@
 import React from "react";
-import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
-const Deck = props => {
-  return (
-    <View style={styles.deckStyle}>
-      <Text>{props.deck.name}</Text>
-    </View>
-  );
-};
+export default class Deck extends React.Component {
+  deckPressed(cards) {
+    this.props.showCards(cards);
+  }
+
+  render() {
+    return (
+      <TouchableOpacity onPress={() => this.deckPressed(this.props.deck.cards)}>
+        <View style={styles.deckStyle}>
+          <Text>{this.props.deck.name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   deckStyle: {
-    backgroundColor: "#fcba03",
-    width: "50%",
+    backgroundColor: "#ffc503",
+    width: 150,
     height: 200,
     margin: 5,
     borderRadius: 10,
@@ -29,5 +37,3 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
-
-export default Deck;
