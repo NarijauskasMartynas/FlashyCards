@@ -45,12 +45,11 @@ export default class App extends React.Component {
     } else {
       return (
         <View style={styles.container}>
-          <View style={styles.titleRow}>
-            <Button title={"Reset"} onPress={() => this.goToDecks()}></Button>
-            <Button title={"Back"} onPress={() => this.goToDecks()}></Button>
-          </View>
           <View style={styles.cardRow}>
-            <Card cards={this.state.selectedDeck}></Card>
+            <Card
+              cards={this.state.selectedDeck}
+              backBtnPressed={() => this.goToDecks()}
+            ></Card>
           </View>
         </View>
       );
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
   },
   titleRow: {
     height: "5%",
-    justifyContent: "space-around",
+    justifyContent: "flex-start",
     flexDirection: "row",
     backgroundColor: "#ffb026"
   },

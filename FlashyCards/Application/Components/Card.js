@@ -7,8 +7,17 @@ export default class Card extends React.Component {
 
     this.state = {
       showBack: false,
-      currentCard: 0
+      currentCard: 0,
+      correctCards: [],
+      wrongCards: [],
+      currentDeck: []
     };
+  }
+
+  componentWillMount() {
+    this.setState({
+      currentDeck: this.props.cards
+    });
   }
 
   flipCard() {
@@ -19,27 +28,62 @@ export default class Card extends React.Component {
 
   nextCard() {
     let currentCard = this.state.currentCard;
-    this.setState({ currentCard: currentCard + 1, showBack: false });
+    if (currentCard >= this.state.currentDeck.length - 1) {
+      let newDeck = this.state.wrongCards.concat(this.state.correctCards);
+      this.resetState(newDeck);
+    } else {
+      this.setState({ currentCard: currentCard + 1, showBack: false });
+    }
   }
 
   correctButtonPressed() {
+    correctCards = this.state.correctCards;
+    correctCards.push(this.state.currentDeck[this.state.currentCard]);
+    this.setState({ correctCards: correctCards });
     this.nextCard();
   }
 
   wrongButtonPressed() {
+    wrongCards = this.state.wrongCards;
+    wrongCards.push(this.state.currentDeck[this.state.currentCard]);
     this.nextCard();
+  }
+
+  resetPressed() {
+    remainingCards = this.state.currentDeck.slice(this.state.currentCard);
+    let newDeck = this.state.wrongCards
+      .concat(remainingCards)
+      .concat(this.state.correctCards);
+    this.resetState(newDeck);
+  }
+
+  resetState(newDeck) {
+    this.setState({
+      currentDeck: newDeck,
+      currentCard: 0,
+      showBack: false,
+      correctCards: [],
+      wrongCards: []
+    });
   }
 
   render() {
     return (
-      <View>
+      <View style={{ paddingTop: -5 }}>
+        <View style={styles.titleRow}>
+          <Button
+            title={"Back"}
+            onPress={() => this.props.backBtnPressed()}
+          ></Button>
+          <Button title={"Reset"} onPress={() => this.resetPressed()}></Button>
+        </View>
         <TouchableOpacity onPress={() => this.flipCard()}>
           <View
             style={[
               styles.CardStyle,
               {
                 backgroundColor: this.state.showBack ? "#ffc503" : "black",
-                height: this.state.showBack ? "90%" : "92%"
+                height: this.state.showBack ? "90%" : "91%"
               }
             ]}
           >
@@ -56,8 +100,8 @@ export default class Card extends React.Component {
               </Text>
 
               {this.state.showBack
-                ? this.props.cards[this.state.currentCard].back
-                : this.props.cards[this.state.currentCard].front}
+                ? this.state.currentDeck[this.state.currentCard].back
+                : this.state.currentDeck[this.state.currentCard].front}
             </Text>
           </View>
         </TouchableOpacity>
@@ -67,13 +111,13 @@ export default class Card extends React.Component {
             <Button
               title={"Wrong"}
               color="red"
-              onPress={() => this.correctButtonPressed()}
+              onPress={() => this.wrongButtonPressed()}
             ></Button>
 
             <Button
               title={"Correct"}
               color="green"
-              onPress={() => this.wrongButtonPressed()}
+              onPress={() => this.correctButtonPressed()}
             ></Button>
           </View>
         )}
