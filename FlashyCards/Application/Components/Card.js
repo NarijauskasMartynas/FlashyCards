@@ -25,6 +25,7 @@ export default class Card extends React.Component {
     this.setState({
       currentDeck: cardsWithTimes
     });
+    console.log(this.state.currentDeck);
   }
 
   componentDidMount() {
@@ -94,7 +95,7 @@ export default class Card extends React.Component {
 
   render() {
     return (
-      <View style={{ paddingTop: -5 }}>
+      <View>
         <View style={styles.titleRow}>
           <Button
             title={"Back"}
@@ -107,48 +108,63 @@ export default class Card extends React.Component {
             onPress={() => this.resetPressed()}
           ></Button>
         </View>
-        <TouchableOpacity onPress={() => this.flipCard()}>
-          <View
-            style={[
-              styles.CardStyle,
-              {
-                backgroundColor: this.state.showBack ? "#ffc503" : "black",
-                height: this.state.showBack ? "90%" : "91%"
-              }
-            ]}
-          >
-            <Text
-              style={{
-                fontSize: 30,
-                textAlign: "center",
-                color: this.state.showBack ? "black" : "white"
-              }}
-            >
-              <Text style={{ fontSize: 200, textAlign: "center" }}>
-                {this.state.showBack ? "!" : "?"}
-                {"\n"}
-              </Text>
+        {this.state.currentDeck.length > 0 && (
+          <View>
+            <TouchableOpacity onPress={() => this.flipCard()}>
+              <View
+                style={[
+                  styles.CardStyle,
+                  {
+                    backgroundColor: this.state.showBack ? "#ffc503" : "black",
+                    height: this.state.showBack ? "90%" : "91%"
+                  }
+                ]}
+              >
+                <Text
+                  style={{
+                    fontSize: 30,
+                    textAlign: "center",
+                    color: this.state.showBack ? "black" : "white"
+                  }}
+                >
+                  <Text style={{ fontSize: 200, textAlign: "center" }}>
+                    {this.state.showBack ? "!" : "?"}
+                    {"\n"}
+                  </Text>
 
-              {this.state.showBack
-                ? this.state.currentDeck[this.state.currentCard].back
-                : this.state.currentDeck[this.state.currentCard].front}
-            </Text>
+                  {this.state.showBack
+                    ? this.state.currentDeck[this.state.currentCard].back
+                    : this.state.currentDeck[this.state.currentCard].front}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            {this.state.showBack && (
+              <View style={styles.titleRow}>
+                <Button
+                  title={"Wrong"}
+                  color="red"
+                  onPress={() => this.wrongButtonPressed()}
+                ></Button>
+
+                <Button
+                  title={"Correct"}
+                  color="green"
+                  onPress={() => this.correctButtonPressed()}
+                ></Button>
+              </View>
+            )}
           </View>
-        </TouchableOpacity>
-
-        {this.state.showBack && (
-          <View style={styles.titleRow}>
-            <Button
-              title={"Wrong"}
-              color="red"
-              onPress={() => this.wrongButtonPressed()}
-            ></Button>
-
-            <Button
-              title={"Correct"}
-              color="green"
-              onPress={() => this.correctButtonPressed()}
-            ></Button>
+        )}
+        {this.state.currentDeck.length === 0 && (
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1
+            }}
+          >
+            <Text>Deck is empty</Text>
           </View>
         )}
       </View>

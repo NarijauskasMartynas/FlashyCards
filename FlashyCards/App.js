@@ -4,6 +4,7 @@ import Constants from "expo-constants";
 import decks from "./Application/Store/flashcards";
 import Deck from "./Application/Components/Deck";
 import Card from "./Application/Components/Card";
+import Form from "./Application/Components/Form";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -11,7 +12,9 @@ export default class App extends React.Component {
 
     this.state = {
       showCards: false,
-      selectedDeck: ""
+      selectedDeck: "",
+      addingNewForm: false,
+      decks: decks
     };
   }
 
@@ -23,16 +26,38 @@ export default class App extends React.Component {
     this.setState({ showCards: false });
   }
 
+  addNewDeck(deck) {
+    let newDecks = this.state.decks;
+    newDecks.push(deck);
+    this.setState({
+      decks: newDecks,
+      addingNewForm: false
+    });
+  }
+
+  openForm() {
+    this.setState({
+      addingNewForm: !this.state.addingNewForm
+    });
+  }
+
   render() {
     if (!this.state.showCards) {
       return (
         <View style={styles.container}>
-          <Button color="#b38914" title="Add new deck"></Button>
+          <Button
+            color="#b38914"
+            title="Add new deck"
+            onPress={() => this.openForm()}
+          ></Button>
+          {this.state.addingNewForm && (
+            <Form addDeck={deck => this.addNewDeck(deck)}></Form>
+          )}
           <ScrollView
             contentContainerStyle={{ alignItems: "center", flexGrow: 1 }}
             style={styles.scrollView}
           >
-            {decks.map(deck => (
+            {this.state.decks.map(deck => (
               <Deck
                 deck={deck}
                 key={deck.name}
