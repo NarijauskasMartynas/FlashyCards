@@ -1,19 +1,48 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
+import Constants from "expo-constants";
+import decks from "./Application/Store/flashcards";
+import Deck from "./Application/Components/Deck";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+export default class App extends React.Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text
+          style={[
+            styles.titleRow,
+            { fontSize: 30, textAlign: "center", backgroundColor: "#7a5c06" }
+          ]}
+        >
+          Flashy Cards
+        </Text>
+        <ScrollView
+          contentContainerStyle={{ alignItems: "center", flexGrow: 1 }}
+          style={styles.scrollView}
+        >
+          {decks.map(deck => (
+            <Deck deck={deck}></Deck>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "column",
+    backgroundColor: "#7a5c06",
+    alignItems: "stretch",
+    alignContent: "center",
+    paddingTop: Constants.statusBarHeight
   },
+  titleRow: {
+    height: "10%",
+    justifyContent: "center"
+  },
+  scrollView: {
+    marginHorizontal: 20
+  }
 });
