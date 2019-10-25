@@ -41,6 +41,14 @@ export default class Card extends React.Component {
     });
   }
 
+  deleteCard() {
+    let filteredArray = this.state.currentDeck.filter(
+      item => item !== this.state.currentDeck[this.state.currentCard]
+    );
+    this.setState({ currentDeck: filteredArray });
+    this.props.updateDeck(filteredArray);
+  }
+
   nextCard() {
     let currentCard = this.state.currentCard;
     if (currentCard >= this.state.currentDeck.length - 1) {
@@ -106,6 +114,11 @@ export default class Card extends React.Component {
             title={"Reset"}
             color={"#5c4a08"}
             onPress={() => this.resetPressed()}
+          ></Button>
+          <Button
+            title={"Delete card"}
+            color={"#5c4a08"}
+            onPress={() => this.deleteCard()}
           ></Button>
         </View>
         {this.state.currentDeck.length > 0 && (

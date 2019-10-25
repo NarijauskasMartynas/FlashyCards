@@ -12,14 +12,20 @@ export default class App extends React.Component {
 
     this.state = {
       showCards: false,
-      selectedDeck: "",
+      cardsArray: "",
       addingNewForm: false,
-      decks: decks
+      decks: decks,
+      selectedDeck: ""
     };
+    console.log("iskvieciame");
   }
 
-  changeState(cards) {
-    this.setState({ showCards: true, selectedDeck: cards });
+  changeState(deck) {
+    this.setState({
+      showCards: true,
+      cardsArray: deck.cards,
+      selectedDeck: deck
+    });
   }
 
   goToDecks() {
@@ -35,9 +41,28 @@ export default class App extends React.Component {
     });
   }
 
+  updateDeck(cardsArray) {
+    let currentDeck = this.state.selectedDeck;
+    let index = this.state.decks.indexOf(currentDeck);
+    let decksArray = this.state.decks;
+    currentDeck.cards = cardsArray;
+    decksArray[index] = currentDeck;
+    this.setState(prevState => ({
+      decks: decksArray
+    }));
+  }
+
   openForm() {
     this.setState({
       addingNewForm: !this.state.addingNewForm
+    });
+  }
+
+  deleteDeck(deck) {
+    let filteredArray = this.state.decks.filter(item => item !== deck);
+    console.log(deck);
+    this.setState({
+      decks: filteredArray
     });
   }
 
@@ -58,11 +83,32 @@ export default class App extends React.Component {
             style={styles.scrollView}
           >
             {this.state.decks.map(deck => (
-              <Deck
-                deck={deck}
+              <View
                 key={deck.name}
-                showCards={cards => this.changeState(cards)}
-              ></Deck>
+                style={{
+                  flexDirection: "row"
+                }}
+              >
+                <View
+                  style={{
+                    justifyContent: "space-around"
+                  }}
+                >
+                  <Button color="green" title="add cards"></Button>
+                  <Button color="purple" title="rename"></Button>
+                </View>
+                <Deck
+                  deck={deck}
+                  showCards={() => this.changeState(deck)}
+                ></Deck>
+                <View style={{ flex: 1, justifyContent: "center" }}>
+                  <Button
+                    color="red"
+                    title="delete"
+                    onPress={() => this.deleteDeck(deck)}
+                  ></Button>
+                </View>
+              </View>
             ))}
           </ScrollView>
         </View>
@@ -72,8 +118,9 @@ export default class App extends React.Component {
         <View style={styles.container}>
           <View style={styles.cardRow}>
             <Card
-              cards={this.state.selectedDeck}
+              cards={this.state.cardsArray}
               backBtnPressed={() => this.goToDecks()}
+              updateDeck={deck => this.updateDeck(deck)}
             ></Card>
           </View>
         </View>

@@ -8,7 +8,7 @@ export default class Deck extends React.Component {
 
   render() {
     return (
-      <TouchableOpacity onPress={() => this.deckPressed(this.props.deck.cards)}>
+      <TouchableOpacity onPress={() => this.deckPressed(this.props.deck)}>
         <View style={styles.deckStyle}>
           <Text>{this.props.deck.name}</Text>
         </View>
