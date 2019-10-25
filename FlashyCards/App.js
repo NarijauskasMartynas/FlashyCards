@@ -15,9 +15,9 @@ export default class App extends React.Component {
       cardsArray: "",
       addingNewForm: false,
       decks: decks,
-      selectedDeck: ""
+      selectedDeck: "",
+      formFunction: ""
     };
-    console.log("iskvieciame");
   }
 
   changeState(deck) {
@@ -41,6 +41,21 @@ export default class App extends React.Component {
     });
   }
 
+  addCard(card) {
+    let currentDeck = this.state.selectedDeck;
+    let index = this.state.decks.indexOf(currentDeck);
+    let currentCardsArray = currentDeck.cards;
+    currentCardsArray.push(card);
+    currentDeck.cards = currentCardsArray;
+
+    let decksArray = this.state.decks;
+    decksArray[index] = currentDeck;
+    this.setState(prevState => ({
+      decks: decksArray,
+      addingNewForm: false
+    }));
+  }
+
   updateDeck(cardsArray) {
     let currentDeck = this.state.selectedDeck;
     let index = this.state.decks.indexOf(currentDeck);
@@ -54,7 +69,8 @@ export default class App extends React.Component {
 
   openForm() {
     this.setState({
-      addingNewForm: !this.state.addingNewForm
+      addingNewForm: !this.state.addingNewForm,
+      formFunction: "add"
     });
   }
 
@@ -64,6 +80,35 @@ export default class App extends React.Component {
     this.setState({
       decks: filteredArray
     });
+  }
+
+  openRenameForm(deck) {
+    this.setState({
+      formFunction: "rename",
+      addingNewForm: !this.state.addingNewForm,
+      selectedDeck: deck
+    });
+  }
+
+  openAddCardForm(deck) {
+    this.setState({
+      formFunction: "addCard",
+      addingNewForm: !this.state.addingNewForm,
+      selectedDeck: deck
+    });
+  }
+
+  renameDeck(text) {
+    let currentDeck = this.state.selectedDeck;
+    currentDeck.name = text;
+    let index = this.state.decks.indexOf(currentDeck);
+    let decksArray = this.state.decks;
+    currentDeck.name = text;
+    decksArray[index] = currentDeck;
+    this.setState(prevState => ({
+      decks: decksArray,
+      addingNewForm: false
+    }));
   }
 
   render() {
@@ -76,7 +121,12 @@ export default class App extends React.Component {
             onPress={() => this.openForm()}
           ></Button>
           {this.state.addingNewForm && (
-            <Form addDeck={deck => this.addNewDeck(deck)}></Form>
+            <Form
+              addDeck={deck => this.addNewDeck(deck)}
+              renameDeck={text => this.renameDeck(text)}
+              addCard={card => this.addCard(card)}
+              function={this.state.formFunction}
+            ></Form>
           )}
           <ScrollView
             contentContainerStyle={{ alignItems: "center", flexGrow: 1 }}
@@ -94,8 +144,16 @@ export default class App extends React.Component {
                     justifyContent: "space-around"
                   }}
                 >
-                  <Button color="green" title="add cards"></Button>
-                  <Button color="purple" title="rename"></Button>
+                  <Button
+                    color="green"
+                    title="add cards"
+                    onPress={() => this.openAddCardForm(deck)}
+                  ></Button>
+                  <Button
+                    color="purple"
+                    title="rename"
+                    onPress={() => this.openRenameForm(deck)}
+                  ></Button>
                 </View>
                 <Deck
                   deck={deck}
