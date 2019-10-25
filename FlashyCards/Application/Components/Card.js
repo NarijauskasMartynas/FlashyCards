@@ -10,19 +10,33 @@ export default class Card extends React.Component {
       currentCard: 0,
       correctCards: [],
       wrongCards: [],
-      currentDeck: []
+      currentDeck: [],
+      startTime: 0,
+      endTime: 0
     };
   }
 
   componentWillMount() {
+    cardsWithTimes = [];
+    this.props.cards.map(card => {
+      let cardWithTime = { front: card.front, back: card.back, time: 0 };
+      cardsWithTimes.push(cardWithTime);
+    });
     this.setState({
-      currentDeck: this.props.cards
+      currentDeck: cardsWithTimes
+    });
+  }
+
+  componentDidMount() {
+    this.setState({
+      startTime: new Date()
     });
   }
 
   flipCard() {
     this.setState({
-      showBack: !this.state.showBack
+      showBack: !this.state.showBack,
+      endTime: new Date()
     });
   }
 
@@ -32,20 +46,31 @@ export default class Card extends React.Component {
       let newDeck = this.state.wrongCards.concat(this.state.correctCards);
       this.resetState(newDeck);
     } else {
-      this.setState({ currentCard: currentCard + 1, showBack: false });
+      this.setState({
+        currentCard: currentCard + 1,
+        showBack: false,
+        startTime: new Date()
+      });
     }
   }
 
   correctButtonPressed() {
     correctCards = this.state.correctCards;
-    correctCards.push(this.state.currentDeck[this.state.currentCard]);
-    this.setState({ correctCards: correctCards });
-    this.nextCard();
+    this.buttonHandling(correctCards);
   }
 
   wrongButtonPressed() {
     wrongCards = this.state.wrongCards;
-    wrongCards.push(this.state.currentDeck[this.state.currentCard]);
+    this.buttonHandling(wrongCards);
+  }
+
+  buttonHandling(cardType) {
+    var timeInSec = (this.state.endTime - this.state.startTime) / 1000;
+    let currentCard = this.state.currentDeck[this.state.currentCard];
+    currentCard.time = timeInSec;
+    cardType.push(currentCard);
+    cardType.sort((a, b) => b.time - a.time);
+    this.setState({ cardType: cardType });
     this.nextCard();
   }
 
@@ -73,9 +98,14 @@ export default class Card extends React.Component {
         <View style={styles.titleRow}>
           <Button
             title={"Back"}
+            color={"#5c4a08"}
             onPress={() => this.props.backBtnPressed()}
           ></Button>
-          <Button title={"Reset"} onPress={() => this.resetPressed()}></Button>
+          <Button
+            title={"Reset"}
+            color={"#5c4a08"}
+            onPress={() => this.resetPressed()}
+          ></Button>
         </View>
         <TouchableOpacity onPress={() => this.flipCard()}>
           <View
