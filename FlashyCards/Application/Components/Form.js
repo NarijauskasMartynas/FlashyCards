@@ -45,17 +45,12 @@ export default class Form extends React.Component {
 
   render() {
     return (
-      <View style={styles.deckStyle}>
+      <View style={styles.container}>
         {this.props.function !== "addCard" && (
           <View>
             <Text>Enter deck name</Text>
             <TextInput
-              style={{
-                height: 40,
-                width: 200,
-                borderColor: "#705d27",
-                borderWidth: 1
-              }}
+              style={styles.inputStyle}
               onChangeText={text => this.onChangeText(text)}
               value={this.state.deckName}
             />
@@ -79,23 +74,13 @@ export default class Form extends React.Component {
           <View>
             <Text>Enter question</Text>
             <TextInput
-              style={{
-                height: 40,
-                width: 200,
-                borderColor: "#705d27",
-                borderWidth: 1
-              }}
+              style={styles.inputStyle}
               onChangeText={text => this.onQuestionChange(text)}
               value={this.state.question}
             />
             <Text>Enter answer</Text>
             <TextInput
-              style={{
-                height: 40,
-                width: 200,
-                borderColor: "#705d27",
-                borderWidth: 1
-              }}
+              style={styles.inputStyle}
               onChangeText={text => this.onAnswerChange(text)}
               value={this.state.answer}
             />
@@ -112,7 +97,7 @@ export default class Form extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  deckStyle: {
+  container: {
     backgroundColor: "#fcba03",
     width: "100%",
     height: 200,
@@ -125,5 +110,11 @@ const styles = StyleSheet.create({
     },
     justifyContent: "center",
     alignItems: "center"
+  },
+  inputStyle: {
+    height: 40,
+    width: 200,
+    borderColor: "#705d27",
+    borderWidth: 1
   }
 });

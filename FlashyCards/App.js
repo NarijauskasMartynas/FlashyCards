@@ -41,14 +41,8 @@ export default class App extends React.Component {
 
   addCard(card) {
     let currentDeck = this.state.selectedDeck;
-    let index = this.state.decks.indexOf(currentDeck);
     currentDeck.cards = [...currentDeck.cards, card];
-    let decksArray = this.state.decks;
-    decksArray[index] = currentDeck;
-    this.setState({
-      decks: decksArray,
-      addingNewForm: false
-    });
+    this.updateDeck(currentDeck.cards);
   }
 
   updateDeck(cardsArray) {
@@ -58,7 +52,8 @@ export default class App extends React.Component {
     currentDeck.cards = cardsArray;
     decksArray[index] = currentDeck;
     this.setState({
-      decks: decksArray
+      decks: decksArray,
+      addingNewForm: false
     });
   }
 
@@ -72,14 +67,13 @@ export default class App extends React.Component {
   renameDeck(text) {
     let currentDeck = this.state.selectedDeck;
     let index = this.state.decks.indexOf(currentDeck);
-    currentDeck.name = text;
     let decksArray = this.state.decks;
     currentDeck.name = text;
     decksArray[index] = currentDeck;
-    this.setState(prevState => ({
+    this.setState({
       decks: decksArray,
       addingNewForm: false
-    }));
+    });
   }
 
   openForm(deck, operation) {
@@ -174,12 +168,6 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     alignContent: "center",
     paddingTop: Constants.statusBarHeight
-  },
-  titleRow: {
-    height: "5%",
-    justifyContent: "flex-start",
-    flexDirection: "row",
-    backgroundColor: "#ffb026"
   },
   scrollView: {
     marginHorizontal: 20
