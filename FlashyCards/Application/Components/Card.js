@@ -25,7 +25,6 @@ export default class Card extends React.Component {
     this.setState({
       currentDeck: cardsWithTimes
     });
-    console.log(this.state.currentDeck);
   }
 
   componentDidMount() {

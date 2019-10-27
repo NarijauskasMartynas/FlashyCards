@@ -33,10 +33,8 @@ export default class App extends React.Component {
   }
 
   addNewDeck(deck) {
-    let newDecks = this.state.decks;
-    newDecks.push(deck);
     this.setState({
-      decks: newDecks,
+      decks: [...this.state.decks, deck],
       addingNewForm: false
     });
   }
@@ -44,16 +42,13 @@ export default class App extends React.Component {
   addCard(card) {
     let currentDeck = this.state.selectedDeck;
     let index = this.state.decks.indexOf(currentDeck);
-    let currentCardsArray = currentDeck.cards;
-    currentCardsArray.push(card);
-    currentDeck.cards = currentCardsArray;
-
+    currentDeck.cards = [...currentDeck.cards, card];
     let decksArray = this.state.decks;
     decksArray[index] = currentDeck;
-    this.setState(prevState => ({
+    this.setState({
       decks: decksArray,
       addingNewForm: false
-    }));
+    });
   }
 
   updateDeck(cardsArray) {
@@ -62,46 +57,22 @@ export default class App extends React.Component {
     let decksArray = this.state.decks;
     currentDeck.cards = cardsArray;
     decksArray[index] = currentDeck;
-    this.setState(prevState => ({
-      decks: decksArray
-    }));
-  }
-
-  openForm() {
     this.setState({
-      addingNewForm: !this.state.addingNewForm,
-      formFunction: "add"
+      decks: decksArray
     });
   }
 
   deleteDeck(deck) {
     let filteredArray = this.state.decks.filter(item => item !== deck);
-    console.log(deck);
     this.setState({
       decks: filteredArray
     });
   }
 
-  openRenameForm(deck) {
-    this.setState({
-      formFunction: "rename",
-      addingNewForm: !this.state.addingNewForm,
-      selectedDeck: deck
-    });
-  }
-
-  openAddCardForm(deck) {
-    this.setState({
-      formFunction: "addCard",
-      addingNewForm: !this.state.addingNewForm,
-      selectedDeck: deck
-    });
-  }
-
   renameDeck(text) {
     let currentDeck = this.state.selectedDeck;
-    currentDeck.name = text;
     let index = this.state.decks.indexOf(currentDeck);
+    currentDeck.name = text;
     let decksArray = this.state.decks;
     currentDeck.name = text;
     decksArray[index] = currentDeck;
@@ -109,6 +80,14 @@ export default class App extends React.Component {
       decks: decksArray,
       addingNewForm: false
     }));
+  }
+
+  openForm(deck, operation) {
+    this.setState({
+      formFunction: operation,
+      addingNewForm: !this.state.addingNewForm,
+      selectedDeck: deck
+    });
   }
 
   render() {
@@ -118,7 +97,7 @@ export default class App extends React.Component {
           <Button
             color="#b38914"
             title="Add new deck"
-            onPress={() => this.openForm()}
+            onPress={() => this.openForm([], "add")}
           ></Button>
           {this.state.addingNewForm && (
             <Form
@@ -147,12 +126,12 @@ export default class App extends React.Component {
                   <Button
                     color="green"
                     title="add cards"
-                    onPress={() => this.openAddCardForm(deck)}
+                    onPress={() => this.openForm(deck, "addCard")}
                   ></Button>
                   <Button
                     color="purple"
                     title="rename"
-                    onPress={() => this.openRenameForm(deck)}
+                    onPress={() => this.openForm(deck, "rename")}
                   ></Button>
                 </View>
                 <Deck
