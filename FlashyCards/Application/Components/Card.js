@@ -2,19 +2,15 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Button } from "react-native";
 
 export default class Card extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      showBack: false,
-      currentCard: 0,
-      correctCards: [],
-      wrongCards: [],
-      currentDeck: [],
-      startTime: 0,
-      endTime: 0
-    };
-  }
+  state = {
+    showBack: false,
+    currentCard: 0,
+    correctCards: [],
+    wrongCards: [],
+    currentDeck: [],
+    startTime: 0,
+    endTime: 0
+  };
 
   componentWillMount() {
     cardsWithTimes = [];
@@ -33,22 +29,22 @@ export default class Card extends React.Component {
     });
   }
 
-  flipCard() {
+  flipCard = () => {
     this.setState({
       showBack: !this.state.showBack,
       endTime: new Date()
     });
-  }
+  };
 
-  deleteCard() {
+  deleteCard = () => {
     let filteredArray = this.state.currentDeck.filter(
       item => item !== this.state.currentDeck[this.state.currentCard]
     );
     this.setState({ currentDeck: filteredArray });
     this.props.updateDeck(filteredArray);
-  }
+  };
 
-  nextCard() {
+  nextCard = () => {
     let currentCard = this.state.currentCard;
     if (currentCard >= this.state.currentDeck.length - 1) {
       let newDeck = this.state.wrongCards.concat(this.state.correctCards);
@@ -60,17 +56,17 @@ export default class Card extends React.Component {
         startTime: new Date()
       });
     }
-  }
+  };
 
-  correctButtonPressed() {
+  correctButtonPressed = () => {
     correctCards = this.state.correctCards;
     this.buttonHandling(correctCards);
-  }
+  };
 
-  wrongButtonPressed() {
+  wrongButtonPressed = () => {
     wrongCards = this.state.wrongCards;
     this.buttonHandling(wrongCards);
-  }
+  };
 
   buttonHandling(cardType) {
     var timeInSec = (this.state.endTime - this.state.startTime) / 1000;
@@ -82,13 +78,13 @@ export default class Card extends React.Component {
     this.nextCard();
   }
 
-  resetPressed() {
+  resetPressed = () => {
     remainingCards = this.state.currentDeck.slice(this.state.currentCard);
     let newDeck = this.state.wrongCards
       .concat(remainingCards)
       .concat(this.state.correctCards);
     this.resetState(newDeck);
-  }
+  };
 
   resetState(newDeck) {
     this.setState({
@@ -112,17 +108,17 @@ export default class Card extends React.Component {
           <Button
             title={"Reset"}
             color={"#5c4a08"}
-            onPress={() => this.resetPressed()}
+            onPress={this.resetPressed}
           ></Button>
           <Button
             title={"Delete card"}
             color={"#5c4a08"}
-            onPress={() => this.deleteCard()}
+            onPress={this.deleteCard}
           ></Button>
         </View>
         {this.state.currentDeck.length > 0 && (
           <View>
-            <TouchableOpacity onPress={() => this.flipCard()}>
+            <TouchableOpacity onPress={this.flipCard}>
               <View
                 style={[
                   styles.CardStyle,
@@ -156,13 +152,13 @@ export default class Card extends React.Component {
                 <Button
                   title={"Wrong"}
                   color="red"
-                  onPress={() => this.wrongButtonPressed()}
+                  onPress={this.wrongButtonPressed}
                 ></Button>
 
                 <Button
                   title={"Correct"}
                   color="green"
-                  onPress={() => this.correctButtonPressed()}
+                  onPress={this.correctButtonPressed}
                 ></Button>
               </View>
             )}

@@ -7,18 +7,14 @@ import Card from "./Application/Components/Card";
 import Form from "./Application/Components/Form";
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      showCards: false,
-      cardsArray: "",
-      addingNewForm: false,
-      decks: decks,
-      selectedDeck: "",
-      formFunction: ""
-    };
-  }
+  state = {
+    showCards: false,
+    cardsArray: "",
+    addingNewForm: false,
+    decks: decks,
+    selectedDeck: "",
+    formFunction: ""
+  };
 
   changeState(deck) {
     this.setState({
@@ -28,9 +24,9 @@ export default class App extends React.Component {
     });
   }
 
-  goToDecks() {
+  goToDecks = () => {
     this.setState({ showCards: false });
-  }
+  };
 
   addNewDeck(deck) {
     this.setState({
@@ -150,7 +146,7 @@ export default class App extends React.Component {
           <View style={styles.cardRow}>
             <Card
               cards={this.state.cardsArray}
-              backBtnPressed={() => this.goToDecks()}
+              backBtnPressed={this.goToDecks}
               updateDeck={deck => this.updateDeck(deck)}
             ></Card>
           </View>
