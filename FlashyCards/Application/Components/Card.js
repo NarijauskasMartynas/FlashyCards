@@ -96,26 +96,32 @@ export default class Card extends React.Component {
     });
   }
 
+  showControllButtons() {
+    return (
+      <View style={styles.titleRow}>
+        <Button
+          title={"Wrong"}
+          color="red"
+          onPress={this.wrongButtonPressed}
+        ></Button>
+
+        <Button
+          title={"Correct"}
+          color="green"
+          onPress={this.correctButtonPressed}
+        ></Button>
+      </View>
+    );
+  }
+
   render() {
     return (
       <View>
-        <View style={styles.titleRow}>
-          <Button
-            title={"Back"}
-            color={"#5c4a08"}
-            onPress={() => this.props.backBtnPressed()}
-          ></Button>
-          <Button
-            title={"Reset"}
-            color={"#5c4a08"}
-            onPress={this.resetPressed}
-          ></Button>
-          <Button
-            title={"Delete card"}
-            color={"#5c4a08"}
-            onPress={this.deleteCard}
-          ></Button>
-        </View>
+        <ButtonsList
+          resetCard={this.resetPressed}
+          deleteCard={this.deleteCard}
+          backPressed={this.props.backBtnPressed}
+        />
         {this.state.currentDeck.length > 0 && (
           <View>
             <TouchableOpacity onPress={this.flipCard}>
@@ -139,42 +145,16 @@ export default class Card extends React.Component {
                     {this.state.showBack ? "!" : "?"}
                     {"\n"}
                   </Text>
-
                   {this.state.showBack
                     ? this.state.currentDeck[this.state.currentCard].back
                     : this.state.currentDeck[this.state.currentCard].front}
                 </Text>
               </View>
             </TouchableOpacity>
-
-            {this.state.showBack && (
-              <View style={styles.titleRow}>
-                <Button
-                  title={"Wrong"}
-                  color="red"
-                  onPress={this.wrongButtonPressed}
-                ></Button>
-
-                <Button
-                  title={"Correct"}
-                  color="green"
-                  onPress={this.correctButtonPressed}
-                ></Button>
-              </View>
-            )}
+            {this.state.showBack && this.showControllButtons()}
           </View>
         )}
-        {this.state.currentDeck.length === 0 && (
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              flex: 1
-            }}
-          >
-            <Text>Deck is empty</Text>
-          </View>
-        )}
+        {this.state.currentDeck.length === 0 && <EmptyView />}
       </View>
     );
   }
@@ -205,3 +185,35 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
+
+const ButtonsList = props => (
+  <View style={styles.titleRow}>
+    <Button
+      title={"Back"}
+      color={"#5c4a08"}
+      onPress={props.backPressed}
+    ></Button>
+    <Button
+      title={"Reset"}
+      color={"#5c4a08"}
+      onPress={props.resetCard}
+    ></Button>
+    <Button
+      title={"Delete card"}
+      color={"#5c4a08"}
+      onPress={props.deleteCard}
+    ></Button>
+  </View>
+);
+
+const EmptyView = () => (
+  <View
+    style={{
+      justifyContent: "center",
+      alignItems: "center",
+      flex: 1
+    }}
+  >
+    <Text>Deck is empty</Text>
+  </View>
+);
