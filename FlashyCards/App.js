@@ -1,10 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 import Constants from "expo-constants";
 import decks from "./Application/Store/flashcards";
-import Deck from "./Application/Components/Deck";
 import Card from "./Application/Components/Card";
 import Form from "./Application/Components/Form";
+import DeckList from "./Application/Components/DeckList";
 
 export default class App extends React.Component {
   state = {
@@ -16,13 +16,13 @@ export default class App extends React.Component {
     formFunction: ""
   };
 
-  changeState(deck) {
+  changeState = deck => {
     this.setState({
       showCards: true,
       cardsArray: deck.cards,
       selectedDeck: deck
     });
-  }
+  };
 
   goToDecks = () => {
     this.setState({ showCards: false });
@@ -53,12 +53,12 @@ export default class App extends React.Component {
     });
   }
 
-  deleteDeck(deck) {
+  deleteDeck = deck => {
     let filteredArray = this.state.decks.filter(item => item !== deck);
     this.setState({
       decks: filteredArray
     });
-  }
+  };
 
   renameDeck(text) {
     let currentDeck = this.state.selectedDeck;
@@ -72,56 +72,13 @@ export default class App extends React.Component {
     });
   }
 
-  openForm(deck, operation) {
+  openForm = (deck, operation) => {
     this.setState({
       formFunction: operation,
       addingNewForm: !this.state.addingNewForm,
       selectedDeck: deck
     });
-  }
-
-  showDecksList() {
-    return (
-      <ScrollView
-        contentContainerStyle={{ alignItems: "center", flexGrow: 1 }}
-        style={styles.scrollView}
-      >
-        {this.state.decks.map(deck => (
-          <View
-            key={deck.name}
-            style={{
-              flexDirection: "row"
-            }}
-          >
-            <View
-              style={{
-                justifyContent: "space-around"
-              }}
-            >
-              <Button
-                color="green"
-                title="add cards"
-                onPress={() => this.openForm(deck, "addCard")}
-              ></Button>
-              <Button
-                color="purple"
-                title="rename"
-                onPress={() => this.openForm(deck, "rename")}
-              ></Button>
-            </View>
-            <Deck deck={deck} showCards={() => this.changeState(deck)}></Deck>
-            <View style={{ flex: 1, justifyContent: "center" }}>
-              <Button
-                color="red"
-                title="delete"
-                onPress={() => this.deleteDeck(deck)}
-              ></Button>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
-    );
-  }
+  };
 
   render() {
     if (!this.state.showCards) {
@@ -140,7 +97,12 @@ export default class App extends React.Component {
               function={this.state.formFunction}
             ></Form>
           )}
-          {this.showDecksList()}
+          <DeckList
+            decks={this.state.decks}
+            openForm={this.openForm}
+            deleteDeck={this.deleteDeck}
+            changeState={this.changeState}
+          />
         </View>
       );
     } else {
