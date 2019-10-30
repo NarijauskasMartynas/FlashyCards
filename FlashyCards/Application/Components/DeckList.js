@@ -20,7 +20,7 @@ export default class DeckList extends React.Component {
               <Button
                 color="purple"
                 title="rename"
-                onPress={() => thisprops.openForm(deck, "rename")}
+                onPress={() => this.props.openForm(deck, "rename")}
               ></Button>
             </View>
             <Deck
