@@ -2,13 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 export default class Deck extends React.Component {
-  deckPressed(cards) {
-    this.props.showCards(cards);
-  }
-
   render() {
     return (
-      <TouchableOpacity onPress={() => this.deckPressed(this.props.deck)}>
+      <TouchableOpacity onPress={() => this.props.showCards(this.props.deck)}>
         <View style={styles.deckStyle}>
           <Text>{this.props.deck.name}</Text>
         </View>

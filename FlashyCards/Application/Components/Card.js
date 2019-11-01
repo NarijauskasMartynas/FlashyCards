@@ -69,7 +69,7 @@ export default class Card extends React.Component {
   };
 
   buttonHandling(cardType) {
-    var timeInSec = (this.state.endTime - this.state.startTime) / 1000;
+    let timeInSec = (this.state.endTime - this.state.startTime) / 1000;
     let currentCard = this.state.currentDeck[this.state.currentCard];
     currentCard.time = timeInSec;
     cardType.push(currentCard);
@@ -130,7 +130,7 @@ export default class Card extends React.Component {
                   styles.CardStyle,
                   {
                     backgroundColor: this.state.showBack ? "#ffc503" : "black",
-                    height: this.state.showBack ? "90%" : "91%"
+                    height: this.state.showBack ? "90%" : "92.5%"
                   }
                 ]}
               >
